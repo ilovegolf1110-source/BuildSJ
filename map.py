@@ -126,41 +126,30 @@ def load_fire_zones_geojson():
 # Function that holds main code (Used for error handling)
 def main():
     try:
-        # Create an open-source map centered on San Jose.
-        # We use a brighter neutral base so the red/orange danger zones feel dramatic and obvious.
         sj_map = folium.Map(
             location=san_jose_coords,
             zoom_start=11,
-            min_zoom=10,
-            max_zoom=16,
+            min_zoom=11,
             control_scale=True,
-            # Bounds for the map (limits the viewable area)
             min_lat=37.05,
             max_lat=37.45,
             min_lon=-122.1,
             max_lon=-121.65,
-            max_bounds=True,
-            tiles="CartoDB Positron",  # light base map makes red/orange warnings pop
+            max_bounds=True
         )
 
-        # Creates tiles, which are the many small square images that the map will stitch together.
-        # New: we still add a base layer with explicit attribution so it looks clean.
         folium.TileLayer(
             tiles="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
             attr='&copy; OpenStreetMap contributors &copy; CARTO',
             name="Light Map",
         ).add_to(sj_map)
 
-        # Adding the search tool (uses the Photon geocoding service)
-        # Will have to check usage rights for Photon later
         Geocoder(
             provider="photon",
             provider_options={
                 "geocodingQueryParams": {
-                    # Limits autocomplete results to San Jose
                     "bbox": "-122.1, 37.05, -121.65, 37.45",
-                    # Max amount of suggested results
-                    "limit": 5,
+                    "limit": 5
                 }
             },
             add_marker=True,
@@ -168,53 +157,83 @@ def main():
             suggestTimeout=250,
         ).add_to(sj_map)
 
-        # Add the fire hazard zones to the map.
-        # New: use the actual GeoJSON data object instead of a file path so we can
-        # more easily style and inspect the data before drawing it on the map.
-        fire_zones = load_fire_zones_geojson()
-
-        fire_layer = folium.GeoJson(
-            fire_zones,
+        folium.GeoJson(
+            "fire_zones_d10.geojson",
             name="Map of D10 Fire Hazards (by CalFire)",
             style_function=map_style,
-            highlight_function=highlight_style,
-            smooth_factor=2,
             tooltip=folium.GeoJsonTooltip(
                 fields=[FIELD],
-                aliases=["Fire Hazard Level: "],
-                sticky=True,
-                labels=True,
-            ),
-        )
-        fire_layer.add_to(sj_map)
+                aliases=["Fire Hazard Level: "]
+            )
+        ).add_to(sj_map)
 
-        # After generating the map, we add our CSS file to style the map container.
-        # We can't add it to html directly because map generation changes every time the script is run.
         sj_map.get_root().header.add_child(
             folium.Element('<link rel="stylesheet" href="website.css"/>')
         )
 
-        # New: add the custom warning legend so the red/orange danger zones are obvious on the website.
-        sj_map.get_root().html.add_child(folium.Element(create_legend_html()))
+        # --- Neighborhood polygons (APPROXIMATE, folium uses [lat, lon]) ---
+        JUNCTION = [37.240, -121.820]
 
-        # New: keep the map layer control visible so users can toggle the base map/layer.
+        # Shared border points, defined once so adjacent polygons match exactly
+        AB_NORTH = [37.262, -121.874]
+        AB_MID   = [37.240, -121.835]
+        AS_MID   = [37.218, -121.810]
+        AS_SOUTH = [37.195, -121.800]
+        BS_NORTH = [37.262, -121.805]
+        BS_MID   = [37.250, -121.808]
+
+        almaden = [
+            [37.265, -121.885],
+            AB_NORTH, AB_MID, JUNCTION,
+            AS_MID, AS_SOUTH,
+            [37.175, -121.840],
+            [37.190, -121.885],
+            [37.230, -121.895],
+        ]
+
+        blossom_valley = [
+            [37.275, -121.874],
+            [37.275, -121.800],
+            BS_NORTH, BS_MID, JUNCTION,
+            AB_MID, AB_NORTH,
+        ]
+
+        santa_teresa = [
+            BS_NORTH,
+            [37.262, -121.775],
+            [37.235, -121.760],
+            [37.205, -121.760],
+            [37.195, -121.775],
+            AS_SOUTH, AS_MID, JUNCTION,
+            BS_MID,
+        ]
+
+        hoods = folium.FeatureGroup(name="Neighborhoods (approx.)")
+
+        for name, coords, color in [
+            ("Almaden Valley", almaden,        "#d62728"),
+            ("Blossom Valley", blossom_valley, "#2ca02c"),
+            ("Santa Teresa",   santa_teresa,   "#1f77b4"),
+        ]:
+            folium.Polygon(
+                locations=coords,
+                color=color, weight=3,
+                fill=True, fill_color=color, fill_opacity=0.15,
+                tooltip=name,
+            ).add_to(hoods)
+
+        hoods.add_to(sj_map)
         folium.LayerControl().add_to(sj_map)
 
-        # The map is added to our html file.
-        # New: save to the same folder as this script so it is easy to find and consistent.
-        output_path = Path(__file__).resolve().parent / "map.html"
-        sj_map.save(output_path)
-        print("Map was generated on website")  # To inform us that python script has successfully created the map.html file
+        sj_map.save("map.html")
+        print("Map was generated on website")
 
     except FileNotFoundError as e:
         print(f"Missing file: {e}")
     except ValueError as e:
         print(f"Bad data or color mapping: {e}")
-    except json.JSONDecodeError as e:
-        print(f"GeoJSON file is invalid: {e}")
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
-
 
 if __name__ == "__main__":
     main()
