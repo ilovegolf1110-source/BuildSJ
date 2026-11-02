@@ -13,63 +13,18 @@ san_jose_coords = [37.23, -121.82]
 # Define the field and color mapping for fire hazard severity zones
 FIELD = "FIREHAZARDSEVERITYZONE"
 
+# More aggressive warning-map palette so the fire zones read as danger zones on the website.
+# We made the reds/oranges much stronger and the outlines much darker so they stand out.
 fire_colors = {
     "Very High": "#b10000",  # deep red for highest danger
-    "High": "#ff5a1f",       # strong orange/red warning color
-    "Moderate": "#ffb000",   # amber to show medium risk
-    "None": "#dfe4ea",       # light neutral for areas without a recorded fire hazard
+    "High": "#ff5a1f",      # strong orange/red warning color
+    "Moderate": "#ffb000",  # amber to show medium risk
+    "None": "#dfe4ea",      # light neutral for areas without a recorded fire hazard
 }
-
-# ---------------------------------------------------------------
-# NEIGHBORHOOD BORDERS
-# All points are [lat, lon], which is what folium.Polygon expects.
-# ---------------------------------------------------------------
-
-# Shared junction where all three neighborhoods meet (PLACEHOLDER, adjust to the real spot)
-JUNCTION = [37.235, -121.818]
-
-AB_NORTH = [37.262, -121.874]  # Almaden | Blossom Valley, north end
-AB_MID   = [37.240, -121.835]  # Almaden | Blossom Valley, middle
-AS_MID   = [37.218, -121.810]  # Almaden | Santa Teresa, middle
-AS_SOUTH = [37.195, -121.800]  # Almaden | Santa Teresa, south end
-BS_NORTH = [37.262, -121.805]  # Blossom Valley | Santa Teresa, north end
-BS_MID   = [37.250, -121.808]  # Blossom Valley | Santa Teresa, middle
-
-almaden = [
-    [37.265, -121.885],  # NW corner (Los Gatos side)
-    AB_NORTH, AB_MID, JUNCTION,  # shared border with Blossom Valley
-    AS_MID, AS_SOUTH,            # shared border with Santa Teresa
-    [37.175, -121.840],  # south (New Almaden area)
-    [37.190, -121.885],  # SW foothills
-    [37.230, -121.895],  # west foothills
-]
-
-blossom_valley = [
-    [37.275, -121.874],  # NW corner
-    [37.275, -121.800],  # NE corner
-    BS_NORTH, BS_MID, JUNCTION,  # shared border with Santa Teresa
-    AB_MID, AB_NORTH,            # shared border with Almaden
-]
-
-santa_teresa = [
-    BS_NORTH,                    # shared border with Blossom Valley
-    [37.262, -121.775],  # NE corner
-    [37.235, -121.760],  # east edge
-    [37.205, -121.760],
-    [37.195, -121.775],  # SE corner
-    AS_SOUTH, AS_MID, JUNCTION,  # shared border with Almaden
-    BS_MID,                      # back to Blossom Valley border
-]
-
-# name -> (points, color)
-NEIGHBORHOODS = {
-    "Almaden": (almaden, "#2b7de9"),
-    "Blossom Valley": (blossom_valley, "#2fa84f"),
-    "Santa Teresa": (santa_teresa, "#8e44ad"),
-}
-
 
 # New: normalize a few possible variations of the hazard label.
+# Some GeoJSON layers use values like "Very High", "VERY HIGH", or blank values.
+# We convert them into the exact names we use in fire_colors so the styling is stable.
 def normalize_hazard_level(value):
     if value is None:
         return "None"
@@ -91,18 +46,55 @@ def normalize_hazard_level(value):
     return aliases.get(cleaned_upper, cleaned)
 
 
+# Try several likely GeoJSON property names so the fire layer still renders even when the source data uses a slightly different key.
+def get_hazard_value(properties):
+    if not isinstance(properties, dict):
+        return None
+
+    candidates = [
+        FIELD,
+        FIELD.lower(),
+        FIELD.upper(),
+        "FIRE_HAZARD_SEVERITY_ZONE",
+        "fire_hazard_severity_zone",
+        "FireHazardSeverityZone",
+        "firehazardseverityzone",
+        "severity",
+        "hazard",
+    ]
+
+    for key in candidates:
+        value = properties.get(key)
+        if value is not None and str(value).strip() != "":
+            return value
+
+    normalized_keys = {
+        key.replace("_", "").replace(" ", "").lower(): key
+        for key in properties.keys()
+    }
+    match_key = normalized_keys.get("firehazardseverityzone")
+    if match_key:
+        return properties.get(match_key)
+
+    return None
+
+
+# Function to define the style for each fire hazard zone on the map.
+# We made the boundaries heavier and the fill much stronger so the zones look like a warning layer.
 def map_style(feature):
     properties = feature.get("properties", {})
-    raw_level = properties.get(FIELD)
+    raw_level = get_hazard_value(properties)
     level = normalize_hazard_level(raw_level)
-    color = fire_colors.get(level, "#868e96")  # dark gray fallback
+    color = fire_colors.get(level, "#868e96")  # dark gray fallback if something unexpected happens
 
     return {
         "fillColor": color,
-        "color": "#111111",
-        "weight": 3.5,
-        "opacity": 1,
-        "fillOpacity": 0.88,
+        "color": "#000000",
+        "weight": 6,
+        "opacity": 1.0,
+        "fillOpacity": 0.72,
+        "stroke": True,
+        "fill": True,
         "dashArray": "",
         "lineJoin": "round",
         "lineCap": "round",
@@ -110,16 +102,19 @@ def map_style(feature):
     }
 
 
+# New: add a hovering state so the map feels more fluid and the danger areas get more obvious.
+# When the user hovers, the zone gets a darker outline and even stronger fill to feel like a warning layer.
 def highlight_style(feature):
     base = map_style(feature)
     return {
         **base,
-        "weight": 6,
-        "fillOpacity": 1.0,
+        "weight": 8,
+        "fillOpacity": 0.9,
         "color": "#000000",
     }
 
 
+# New: add a legend to make the fire hazard map immediately readable on the website.
 def create_legend_html():
     return """
     <div style="
@@ -152,6 +147,7 @@ def create_legend_html():
     """
 
 
+# New: a small helper to safely load the GeoJSON file and keep the map path stable.
 def load_fire_zones_geojson():
     geojson_path = Path(__file__).resolve().parent / "fire_zones_d10.geojson"
 
@@ -162,33 +158,43 @@ def load_fire_zones_geojson():
         return json.load(geojson_file)
 
 
+# Function that holds main code (Used for error handling)
 def main():
     try:
+        # Create an open-source map centered on San Jose.
+        # We use a brighter neutral base so the red/orange danger zones feel dramatic and obvious.
         sj_map = folium.Map(
             location=san_jose_coords,
             zoom_start=11,
             min_zoom=10,
             max_zoom=16,
             control_scale=True,
+            # Bounds for the map (limits the viewable area)
             min_lat=37.05,
             max_lat=37.45,
             min_lon=-122.1,
             max_lon=-121.65,
             max_bounds=True,
-            tiles="CartoDB Positron",
+            tiles="CartoDB Positron",  # light base map makes red/orange warnings pop
         )
 
+        # Creates tiles, which are the many small square images that the map will stitch together.
+        # New: we still add a base layer with explicit attribution so it looks clean.
         folium.TileLayer(
             tiles="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
             attr='&copy; OpenStreetMap contributors &copy; CARTO',
             name="Light Map",
         ).add_to(sj_map)
 
+        # Adding the search tool (uses the Photon geocoding service)
+        # Will have to check usage rights for Photon later
         Geocoder(
             provider="photon",
             provider_options={
                 "geocodingQueryParams": {
+                    # Limits autocomplete results to San Jose
                     "bbox": "-122.1, 37.05, -121.65, 37.45",
+                    # Max amount of suggested results
                     "limit": 5,
                 }
             },
@@ -197,7 +203,15 @@ def main():
             suggestTimeout=250,
         ).add_to(sj_map)
 
+        # Add the fire hazard zones to the map.
+        # New: use the actual GeoJSON data object instead of a file path so we can
+        # more easily style and inspect the data before drawing it on the map.
         fire_zones = load_fire_zones_geojson()
+
+        # Debug output to confirm field names in the GeoJSON source.
+        if fire_zones.get("features"):
+            first_props = fire_zones["features"][0].get("properties", {})
+            print("GeoJSON property keys:", list(first_props.keys())[:20])
 
         fire_layer = folium.GeoJson(
             fire_zones,
@@ -214,31 +228,23 @@ def main():
         )
         fire_layer.add_to(sj_map)
 
-        # NEW: neighborhood borders, added AFTER the fire layer so they draw on top.
-        hood_group = folium.FeatureGroup(name="Neighborhood Borders")
-        for name, (coords, color) in NEIGHBORHOODS.items():
-            folium.Polygon(
-                locations=coords,
-                color=color,
-                weight=4,
-                fill=True,
-                fill_color=color,
-                fill_opacity=0.08,  # low so the fire zones underneath stay readable
-                tooltip=name,
-            ).add_to(hood_group)
-        hood_group.add_to(sj_map)
-
+        # After generating the map, we add our CSS file to style the map container.
+        # We can't add it to html directly because map generation changes every time the script is run.
         sj_map.get_root().header.add_child(
             folium.Element('<link rel="stylesheet" href="website.css"/>')
         )
 
+        # New: add the custom warning legend so the red/orange danger zones are obvious on the website.
         sj_map.get_root().html.add_child(folium.Element(create_legend_html()))
 
+        # New: keep the map layer control visible so users can toggle the base map/layer.
         folium.LayerControl().add_to(sj_map)
 
+        # The map is added to our html file.
+        # New: save to the same folder as this script so it is easy to find and consistent.
         output_path = Path(__file__).resolve().parent / "map.html"
         sj_map.save(output_path)
-        print("Map was generated on website")
+        print("Map was generated on website")  # To inform us that python script has successfully created the map.html file
 
     except FileNotFoundError as e:
         print(f"Missing file: {e}")
