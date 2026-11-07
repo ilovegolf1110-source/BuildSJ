@@ -3,6 +3,30 @@
    EMERGENCY PREPAREDNESS CHECKLIST
    ========================================= */
 
+/* ===== Build SJ clickable title ===== */
+
+.site-title,
+.site-title:link,
+.site-title:visited,
+.site-title:hover,
+.site-title:active {
+    color: white !important;
+    text-decoration: none !important;
+    border-bottom: none !important;
+    cursor: pointer;
+}
+
+.site-title h1 {
+    color: white;
+    text-decoration: none !important;
+    margin: 5px 0;
+    transition: opacity 0.2s ease;
+}
+
+.site-title:hover h1 {
+    opacity: 0.8;
+}
+
 :root {
     --brand: #107aa7;
     --brand-dark: #08638a;
@@ -27,17 +51,25 @@ html {
     scroll-behavior: smooth;
 }
 
+/* ===== Uploaded Forest Background ===== */
+
 body {
     min-height: 100vh;
     margin: 0;
     padding: 0;
-    color: white;
-    font-family: -apple-system, BlinkMacSystemFont,
-        "Segoe UI", Roboto, Arial, sans-serif;
-    background: linear-gradient(145deg, var(--bg1), var(--bg2));
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    line-height: 1.6;
+
+    background-image:
+        linear-gradient(
+            rgba(8, 32, 51, 0.15),
+            rgba(8, 32, 51, 0.15)
+        ),
+        url("1080p_HBK_autumn-morning_GI.jpg");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-color: #183d29;
 }
 
 /* ===== Header and navigation ===== */
@@ -48,35 +80,29 @@ header {
         var(--brand),
         var(--brand-dark)
     );
-    padding: 16px 24px;
+    padding: 8px 20px 8px 32px;
     border-bottom: 1px solid rgba(255,255,255,0.15);
     box-shadow: 0 5px 20px rgba(0,0,0,0.16);
 }
 
 nav {
-    max-width: 1200px;
-    margin: 0 auto;
+    width: 100%;
+    max-width: none;
+    margin: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 16px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
 }
 
 .nav-links {
     display: flex;
     align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
+    gap: 14px;
+    flex-wrap: nowrap;
 }
 
-h1 {
-    color: white;
-    margin: 5px 0;
-    font-size: clamp(24px, 4vw, 34px);
-    line-height: 1.2;
-    letter-spacing: -0.5px;
-}
 
 /* ===== Buttons ===== */
 
@@ -111,14 +137,6 @@ input:focus-visible {
 }
 
 /* Active navigation tab */
-
-#map-page .tab-map button,
-#checklist-page .tab-checklist button {
-    background: white;
-    color: var(--brand-dark);
-    border-color: white;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
 
 /* ===== Main content panel ===== */
 
@@ -158,6 +176,8 @@ input:focus-visible {
     display: grid;
     gap: 12px;
     margin-top: 22px;
+    list-style: none;
+    padding-left: 0;
 }
 
 /* Individual checklist cards */
@@ -395,7 +415,25 @@ progress.not-started::-moz-progress-bar {
     .checklist-item {
         padding: 13px;
         gap: 11px;
-    }
+
+/* Map button */
+.navbar .map-button {
+    background: rgba(255, 255, 255, 0.12);
+    min-width: 156px;
+}
+
+/* Preparation Checklist button */
+.navbar .checklist-button {
+    min-width: 396px;
+}
+
+/* Space between buttons */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 36px;
+}
 
     .checklist-item label {
         font-size: 14px;
@@ -417,4 +455,72 @@ progress.not-started::-moz-progress-bar {
         animation-duration: 0.01ms !important;
         transform: none !important;
     }
+}
+
+/* Remove unwanted left indentation from checklist */
+.checklist,
+.checklist ul,
+.checklist ol {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    list-style: none;
+}
+
+/* Align wildfire checklist cards */
+.checklist-item {
+    margin-left: 0 !important;
+}
+
+/* Center Submit Information button */
+.submit-button {
+    display: block !important;
+    width: fit-content;
+    margin: 24px auto 0 auto !important;
+}
+body {
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.container {
+    margin-left: 0;
+    padding-left: 0;
+}
+/* Top-right navigation buttons */
+.navbar button,
+.navbar a {
+    background: transparent;
+    color: white;
+    border: 6px solid white;
+    border-radius: 10px;
+    padding: 16px 40px;
+    font-size: 32px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+/* Map button */
+.navbar .map-button {
+    background: rgba(255, 255, 255, 0.12);
+    min-width: 156px;
+}
+
+/* Preparation Checklist button */
+.navbar .checklist-button {
+    min-width: 396px;
+}
+
+/* Space between buttons */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 36px;
+}
+.content {
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
 }
