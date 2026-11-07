@@ -28,10 +28,10 @@
 }
 
 :root {
-    --brand: #107aa7;
-    --brand-dark: #08638a;
-    --bg1: #0f2a44;
-    --bg2: #082033;
+    --brand: #315f3b;
+    --brand-dark: #1e4229;
+    --bg1: #102719;
+    --bg2: #081b10;
     --card: #ffffff;
     --muted: #64748b;
     --text: #0f172a;
@@ -58,7 +58,9 @@ body {
     color: white;
     font-family: -apple-system, BlinkMacSystemFont,
         "Segoe UI", Roboto, Arial, sans-serif;
-    background: linear-gradient(145deg, var(--bg1), var(--bg2));
+   background:
+    linear-gradient(rgba(0, 20, 5, 0.40), rgba(0, 20, 5, 0.50)),
+    url("https://images.unsplash.com/photo-1448375240586-882707db888b?w=2000") center center / cover no-repeat fixed;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     line-height: 1.6;
@@ -68,11 +70,7 @@ body {
 /* ===== Header and navigation ===== */
 
 header {
-    background: linear-gradient(
-        120deg,
-        var(--brand),
-        var(--brand-dark)
-    );
+    background: rgba(18, 55, 30, 0.95);
     padding: 8px 20px 8px 32px;
     border-bottom: 1px solid rgba(255,255,255,0.15);
     box-shadow: 0 5px 20px rgba(0,0,0,0.16);
@@ -408,7 +406,16 @@ progress.not-started::-moz-progress-bar {
     .checklist-item {
         padding: 13px;
         gap: 11px;
+}
 
+.navbar .map-button {
+    background: rgba(255, 255, 255, 0.12);
+    min-width: 156px;
+}
+
+.navbar .checklist-button {
+    min-width: 396px;
+}
 /* Map button */
 .navbar .map-button {
     background: rgba(255, 255, 255, 0.12);
