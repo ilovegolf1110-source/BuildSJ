@@ -1,9 +1,79 @@
 
 /* =========================================
    EMERGENCY PREPAREDNESS CHECKLIST
+   FOREST THEME
    ========================================= */
 
-/* ===== Build SJ clickable title ===== */
+/* ===== Color Variables ===== */
+
+:root {
+    --brand: #315f3b;
+    --brand-dark: #1e4229;
+    --card: #ffffff;
+    --muted: #64748b;
+    --text: #17251a;
+    --border: #d8e3d7;
+    --success: #15803d;
+    --radius: 14px;
+}
+
+/* ===== General Page Styling ===== */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Roboto, Arial, sans-serif;
+
+    /* FOREST BACKGROUND */
+    background:
+        linear-gradient(
+            rgba(5, 25, 12, 0.48),
+            rgba(5, 25, 12, 0.58)
+        ),
+        url("https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=2000&q=85");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6;
+}
+
+/* ===== Header and Navigation ===== */
+
+header {
+    background: rgba(18, 55, 30, 0.90);
+    padding: 8px 32px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+}
+
+nav {
+    width: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: nowrap;
+}
+
+/* Clickable SJ title */
 
 .site-title,
 .site-title:link,
@@ -27,77 +97,7 @@
     opacity: 0.8;
 }
 
-:root {
-    --brand: #107aa7;
-    --brand-dark: #08638a;
-    --bg1: #0f2a44;
-    --bg2: #082033;
-    --card: #ffffff;
-    --muted: #64748b;
-    --text: #0f172a;
-    --border: #e2e8f0;
-    --success: #15803d;
-    --radius: 14px;
-}
-
-/* ===== General page styling ===== */
-
-* {
-    box-sizing: border-box;
-}
-
-html {
-    min-height: 100%;
-    scroll-behavior: smooth;
-}
-
-body {
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
-    color: white;
-    font-family: -apple-system, BlinkMacSystemFont,
-        "Segoe UI", Roboto, Arial, sans-serif;
-    background:
-    linear-gradient(
-        rgba(8, 32, 51, 0.40),
-        rgba(8, 32, 51, 0.40)
-    ),
-    url("https://images.unsplash.com/photo-1448375240586-882707db888b");
-
-background-size: cover;
-background-position: center;
-background-repeat: no-repeat;
-background-attachment: fixed;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    line-height: 1.6;
-}
-
-
-/* ===== Header and navigation ===== */
-
-header {
-    background: linear-gradient(
-        120deg,
-        var(--brand),
-        var(--brand-dark)
-    );
-    padding: 8px 20px 8px 32px;
-    border-bottom: 1px solid rgba(255,255,255,0.15);
-    box-shadow: 0 5px 20px rgba(0,0,0,0.16);
-}
-
-nav {
-    width: 100%;
-    max-width: none;
-    margin: 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
-    flex-wrap: nowrap;
-}
+/* Navigation Links */
 
 .nav-links {
     display: flex;
@@ -106,32 +106,26 @@ nav {
     flex-wrap: nowrap;
 }
 
-
 /* ===== Buttons ===== */
 
 button {
-    background: rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.10);
     color: white;
-    border: 1px solid rgba(255,255,255,0.55);
+    border: 2px solid white;
     border-radius: 8px;
     padding: 10px 18px;
     font: inherit;
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
-    transition:
-        background 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 button:hover {
-    background: rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.25);
     transform: translateY(-2px);
-    box-shadow: 0 5px 14px rgba(0,0,0,0.12);
+    box-shadow: 0 5px 14px rgba(0,0,0,0.2);
 }
-
-/* Keyboard accessibility */
 
 button:focus-visible,
 input:focus-visible {
@@ -139,33 +133,35 @@ input:focus-visible {
     outline-offset: 3px;
 }
 
-/* Active navigation tab */
-
-/* ===== Main content panel ===== */
+/* ===== Main Content Panel ===== */
 
 .content {
     width: min(960px, calc(100% - 32px));
     margin: 32px auto;
     padding: clamp(20px, 4vw, 36px);
+
     color: var(--text);
-    background: var(--card);
-    border: 1px solid rgba(255,255,255,0.6);
+
+    /* Slightly transparent white */
+    background: rgba(255, 255, 255, 0.95);
+
+    border: 1px solid rgba(255,255,255,0.7);
     border-radius: 18px;
-    box-shadow: 0 18px 45px rgba(0,0,0,0.18);
+    box-shadow: 0 18px 45px rgba(0,0,0,0.3);
 }
 
-/* Content headings */
+/* Content Headings */
 
 .content h2 {
     margin-top: 0;
     margin-bottom: 10px;
-    color: #0f2a44;
+    color: #1e4229;
     font-size: clamp(23px, 3vw, 30px);
     line-height: 1.3;
 }
 
 .content h3 {
-    color: #163c58;
+    color: #315f3b;
     margin-bottom: 8px;
 }
 
@@ -173,7 +169,7 @@ input:focus-visible {
     color: #475569;
 }
 
-/* ===== Checklist layout ===== */
+/* ===== Checklist Layout ===== */
 
 .checklist {
     display: grid;
@@ -181,9 +177,10 @@ input:focus-visible {
     margin-top: 22px;
     list-style: none;
     padding-left: 0;
+    margin-left: 0;
 }
 
-/* Individual checklist cards */
+/* Checklist Cards */
 
 .checklist-item {
     display: flex;
@@ -193,20 +190,14 @@ input:focus-visible {
     border: 1px solid var(--border);
     border-radius: var(--radius);
     background: #ffffff;
-    box-shadow: 0 2px 6px rgba(15,23,42,0.03);
-    transition:
-        border-color 0.2s ease,
-        background 0.2s ease,
-        box-shadow 0.2s ease,
-        transform 0.2s ease;
+    box-shadow: 0 2px 6px rgba(15,23,42,0.05);
+    transition: all 0.2s ease;
 }
 
-/* Checklist hover effect */
-
 .checklist-item:hover {
-    border-color: #9bcde0;
-    background: #f8fcff;
-    box-shadow: 0 5px 14px rgba(15,23,42,0.07);
+    border-color: #86a98b;
+    background: #f5faf5;
+    box-shadow: 0 5px 14px rgba(15,23,42,0.10);
     transform: translateY(-1px);
 }
 
@@ -217,11 +208,11 @@ input:focus-visible {
     width: 21px;
     height: 21px;
     margin: 2px 0 0;
-    accent-color: var(--brand);
+    accent-color: #315f3b;
     cursor: pointer;
 }
 
-/* Checklist labels */
+/* Checklist Labels */
 
 .checklist-item label {
     flex: 1;
@@ -231,20 +222,16 @@ input:focus-visible {
     cursor: pointer;
 }
 
-/* Highlight completed checklist cards */
+/* Completed Cards */
 
 .checklist-item:has(input[type="checkbox"]:checked) {
     background: #f0fdf4;
     border-color: #bbf7d0;
 }
 
-/* Cross out completed tasks */
-
 .task-item:checked + label {
     text-decoration: line-through;
-    text-decoration-thickness: 1px;
     color: #64748b;
-    font-style: normal;
 }
 
 /* ===== Metadata ===== */
@@ -255,12 +242,10 @@ input:focus-visible {
     line-height: 1.5;
 }
 
-/* ===== Tab buttons ===== */
+/* ===== Tab Buttons ===== */
 
 .tab-button {
-    transition:
-        background 0.2s ease,
-        transform 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 .tab-button:hover {
@@ -268,7 +253,7 @@ input:focus-visible {
     transform: translateY(-2px);
 }
 
-/* ===== Progress bar ===== */
+/* ===== Progress Bar ===== */
 
 progress {
     display: block;
@@ -277,114 +262,121 @@ progress {
     margin: 12px 0 18px;
     overflow: hidden;
     appearance: none;
-    -webkit-appearance: none;
     border: none;
     border-radius: 999px;
     background: #e2e8f0;
 }
-
-/* Progress bar background */
 
 progress::-webkit-progress-bar {
     background: #e2e8f0;
     border-radius: 999px;
 }
 
-/* Default filled portion */
-
 progress::-webkit-progress-value {
-    background: var(--brand);
+    background: #315f3b;
     border-radius: 999px;
     transition: width 0.35s ease;
 }
 
 progress::-moz-progress-bar {
-    background: var(--brand);
+    background: #315f3b;
     border-radius: 999px;
 }
 
-/* Green: completed */
-
-progress.complete::-webkit-progress-value {
-    background: #16a34a;
-}
-
+progress.complete::-webkit-progress-value,
 progress.complete::-moz-progress-bar {
     background: #16a34a;
 }
 
-/* Yellow-green: almost done */
-
-progress.almost-done::-webkit-progress-value {
-    background: #84cc16;
-}
-
+progress.almost-done::-webkit-progress-value,
 progress.almost-done::-moz-progress-bar {
     background: #84cc16;
 }
 
-/* Yellow: halfway */
-
-progress.halfway-past::-webkit-progress-value {
-    background: #eab308;
-}
-
+progress.halfway-past::-webkit-progress-value,
 progress.halfway-past::-moz-progress-bar {
     background: #eab308;
 }
 
-/* Orange: below halfway */
-
-progress.below-halfway::-webkit-progress-value {
-    background: #f97316;
-}
-
+progress.below-halfway::-webkit-progress-value,
 progress.below-halfway::-moz-progress-bar {
     background: #f97316;
 }
 
-/* Red: not started */
-
-progress.not-started::-webkit-progress-value {
-    background: #dc2626;
-}
-
+progress.not-started::-webkit-progress-value,
 progress.not-started::-moz-progress-bar {
     background: #dc2626;
 }
 
-/* ===== Submit button ===== */
+/* ===== Submit Button ===== */
 
 .submit-button {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
+    display: block;
+    width: fit-content;
     min-height: 46px;
-    margin-top: 24px;
+    margin: 24px auto 0;
     padding: 12px 24px;
     color: white;
-    background: var(--brand);
+    background: #315f3b;
     border: none;
     border-radius: 9px;
     font-size: 16px;
     font-weight: 700;
-    box-shadow: 0 4px 10px rgba(16,122,167,0.2);
-    transition:
-        background 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+    box-shadow: 0 4px 10px rgba(16,80,35,0.2);
+    transition: all 0.2s ease;
 }
 
 .submit-button:hover {
-    background: var(--brand-dark);
+    background: #1e4229;
     transform: translateY(-2px);
-    box-shadow: 0 7px 16px rgba(16,122,167,0.25);
+    box-shadow: 0 7px 16px rgba(16,80,35,0.3);
 }
 
-/* ===== Mobile responsiveness ===== */
+/* ===== Navigation Buttons ===== */
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 20px;
+}
+
+.navbar button,
+.navbar a {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+    border-radius: 10px;
+    padding: 12px 24px;
+    font-size: 18px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.navbar button:hover,
+.navbar a:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+.navbar .map-button {
+    background: rgba(255,255,255,0.12);
+    min-width: 156px;
+}
+
+.navbar .checklist-button {
+    min-width: 200px;
+}
+
+/* ===== Mobile Responsiveness ===== */
 
 @media (max-width: 600px) {
+
+    body {
+        background-attachment: scroll;
+    }
+
     header {
         padding: 14px 16px;
     }
@@ -419,24 +411,6 @@ progress.not-started::-moz-progress-bar {
         padding: 13px;
         gap: 11px;
     }
-/* Map button */
-.navbar .map-button {
-    background: rgba(255, 255, 255, 0.12);
-    min-width: 156px;
-}
-
-/* Preparation Checklist button */
-.navbar .checklist-button {
-    min-width: 396px;
-}
-
-/* Space between buttons */
-.navbar {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 36px;
-}
 
     .checklist-item label {
         font-size: 14px;
@@ -445,9 +419,20 @@ progress.not-started::-moz-progress-bar {
     .submit-button {
         width: 100%;
     }
+
+    .navbar {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .navbar button,
+    .navbar a {
+        font-size: 15px;
+        padding: 10px 14px;
+    }
 }
 
-/* ===== Reduced-motion accessibility ===== */
+/* ===== Reduced Motion Accessibility ===== */
 
 @media (prefers-reduced-motion: reduce) {
     *,
@@ -458,79 +443,4 @@ progress.not-started::-moz-progress-bar {
         animation-duration: 0.01ms !important;
         transform: none !important;
     }
-}
-
-/* Remove unwanted left indentation from checklist */
-.checklist,
-.checklist ul,
-.checklist ol {
-    margin-left: 0 !important;
-    padding-left: 0 !important;
-    list-style: none;
-}
-
-/* Align wildfire checklist cards */
-.checklist-item {
-    margin-left: 0 !important;
-}
-
-/* Center Submit Information button */
-.submit-button {
-    display: block !important;
-    width: fit-content;
-    margin: 24px auto 0 auto !important;
-}
-body {
-    margin-left: 0;
-    padding-left: 0;
-}
-
-.container {
-    margin-left: 0;
-    padding-left: 0;
-}
-/* Top-right navigation buttons */
-.navbar button,
-.navbar a {
-    background: transparent;
-    color: white;
-    border: 6px solid white;
-    border-radius: 10px;
-    padding: 16px 40px;
-    font-size: 32px;
-    font-weight: 500;
-    text-decoration: none;
-    cursor: pointer;
-    transition: background 0.2s ease;
-}
-
-/* Map button */
-.navbar .map-button {
-    background: rgba(255, 255, 255, 0.12);
-    min-width: 156px;
-}
-
-/* Preparation Checklist button */
-.navbar .checklist-button {
-    min-width: 396px;
-}
-
-/* Space between buttons */
-.navbar {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 36px;
-}
-   /* ===== Transparent forest background effect ===== */
-
-.content {
-    background: rgba(255, 255, 255, 0.88);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-}
-
-/* Checklist cards */
-.checklist-item {
-    background: rgba(255, 255, 255, 0.92);
 }
