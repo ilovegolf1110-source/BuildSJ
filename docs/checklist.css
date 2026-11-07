@@ -55,17 +55,29 @@ body {
     min-height: 100vh;
     margin: 0;
     padding: 0;
+
     color: white;
     font-family: -apple-system, BlinkMacSystemFont,
         "Segoe UI", Roboto, Arial, sans-serif;
-   background:
-    linear-gradient(rgba(0, 20, 5, 0.40), rgba(0, 20, 5, 0.50)),
-    url("https://images.unsplash.com/photo-1448375240586-882707db888b?w=2000") center center / cover no-repeat fixed;
+
+    /* Forest background */
+    background-color: #102719;
+    background-image:
+        linear-gradient(
+            rgba(0, 20, 5, 0.25),
+            rgba(0, 20, 5, 0.40)
+        ),
+        url("https://images.unsplash.com/photo-1448375240586-882707db888b?w=2000");
+
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     line-height: 1.6;
 }
-
 
 /* ===== Header and navigation ===== */
 
