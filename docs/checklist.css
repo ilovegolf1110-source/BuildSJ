@@ -51,25 +51,29 @@ html {
     scroll-behavior: smooth;
 }
 
-/* ===== Uploaded Forest Background ===== */
+/* ===== Forest Background ===== */
+
+html {
+    min-height: 100%;
+    background-color: #183d29;
+}
 
 body {
     min-height: 100vh;
     margin: 0;
     padding: 0;
 
-    background-image:
+    background:
         linear-gradient(
-            rgba(8, 32, 51, 0.15),
-            rgba(8, 32, 51, 0.15)
+            rgba(8, 32, 51, 0.12),
+            rgba(8, 32, 51, 0.12)
         ),
-        url("1080p_HBK_autumn-morning_GI.jpg");
+        url("./1080p_HBK_autumn-morning_GI.jpg");
 
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background-color: #183d29;
 }
 
 /* ===== Header and navigation ===== */
@@ -412,9 +416,54 @@ progress.not-started::-moz-progress-bar {
         gap: 10px;
     }
 
+
+/* ===== Mobile responsiveness ===== */
+
+@media (max-width: 600px) {
+
+    header {
+        padding: 14px 16px;
+    }
+
+    nav {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .nav-links {
+        width: 100%;
+        gap: 8px;
+    }
+
+    .nav-links button {
+        flex: 1;
+        padding: 10px 12px;
+    }
+
+    .content {
+        width: calc(100% - 20px);
+        margin: 18px auto;
+        padding: 20px 16px;
+        border-radius: 14px;
+    }
+
+    .checklist {
+        gap: 10px;
+    }
+
     .checklist-item {
         padding: 13px;
         gap: 11px;
+    }
+
+    .checklist-item label {
+        font-size: 14px;
+    }
+
+    .submit-button {
+        width: 100%;
+    }
+}
 
 /* Map button */
 .navbar .map-button {
