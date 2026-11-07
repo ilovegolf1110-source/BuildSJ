@@ -531,3 +531,6 @@ body {
     justify-content: flex-end;
     gap: 36px;
 }
+body {
+    background: red !important;
+}
