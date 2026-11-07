@@ -444,3 +444,25 @@ progress.not-started::-moz-progress-bar {
         transform: none !important;
     }
 }
+
+/* ===== FORCE FOREST BACKGROUND ===== */
+
+html,
+body {
+    min-height: 100% !important;
+    background-color: #102719 !important;
+}
+
+body {
+    background-image:
+        linear-gradient(
+            rgba(0, 20, 5, 0.40),
+            rgba(0, 20, 5, 0.55)
+        ),
+        url("https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=2000&q=85") !important;
+
+    background-size: cover !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    background-attachment: fixed !important;
+}
